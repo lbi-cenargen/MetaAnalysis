@@ -15,7 +15,7 @@ All the libraries need to have the same number of lines, these files can be prep
 
 An example of input below: 
 
-c
+Gene | Log2FoldChange | pval | padj
 ------------ | ------------- | ------------- | -------------
 "Aradu.000JC" | 0.303489806396251 | 0.195741894512141 | 0.326509606375421|
 "Aradu.001N3" | -2.96244392768886 | 3.57502584689713e-37 | 6.9031995153895e-36
