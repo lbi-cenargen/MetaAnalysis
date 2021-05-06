@@ -6,14 +6,14 @@ All the libraries used in this analysis are publicy available in [ncbi](https://
 ---
 ## Data processing 
 ---
-Two separated analyses were performed, for abiotic and biotic libraries. 
-The first step is retrieve the data from the differential expression analysis and provide a table for comparison (CTRL x Stressed) with the information of 
+Two separate analyses were performed, for abiotic and biotic libraries. 
+The first step consists in retrieving the data from the differential expression analysis and build a table for comparison (CTRL x Stressed) with the information below:
 
 Gene | Log2FoldChange | pval | padj
 
-All the libraries need to have the same number of lines, these files can be prepared using the script CreateCommomGenesTables.java
+All the libraries must have the same number of lines, and the files can be prepared using the script CreateCommomGenesTables.java
 
-An example of input below: 
+Below the example of an input file: 
 
 Gene | Log2FoldChange | pval | padj
 ------------ | ------------- | ------------- | -------------
@@ -26,7 +26,7 @@ Gene | Log2FoldChange | pval | padj
 
 The R package MetaRNASeq was used to performe the meta-analysis and whole script is described in the metaAnalysis.R file. 
 
-The resulting table from the abiotic and the biotic analysis was used as input for the further analysis of the paper.
+The resulting tables from the abiotic and the biotic analysis were used as input files for the further analysis in the paper.
 
 Create two directories for each analysis
 
@@ -41,9 +41,10 @@ awk -F"\t" '{print $1 "\t" $2 "\t" $4 "\t" $5}' result_edgeR.txt > resEdgeR_trea
 ```
 Count the total of unique genes present in all libraries 
 ```
-cat *result_edgeR.txt|awk '{print $1}'|sort -u|wc
+cat *result_edgeR.txt|awk '{print $1}'|sort -u > list_genes.txt
+awk '{print NR "\t" $0}' list_genes.txt > numbered_list_genes.txt
 ```
-This is the number of lines that the final file should have. 
+The resulting number is the number of lines which the final file should have. 
 
 Run the script CreateCommonGenesTables.java to complete each table with all the genes found in the all the analysis
 
@@ -52,6 +53,20 @@ javac CreateCommomGenesTables.java
 java CreateCommomGenesTables
 ```
 
+Using R execute the script metaAnalysis.R
 
+Below and example of the result of metaAnalysis:
 
+Gene_model | "DE.DDHI" | "DE.DDD" | "DE.SDHI" | "DE.SDD" | "DE.fishercomb" | "X1" | "X2"| "X3" | "X4" | "signFC" | "DE"
+------------ | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | -------------
+"51" | 0 | 0 | 0 | 1 | 1 | -0.151094515316481 | -0.548527912447952 | -0.220747575674181 | -1.29157607217008 | -1 | FALSE|
+"60" | 1 | 1 | 0 | 1 | 1 | -2.64431233840503 | -8.91671418450554 | -1.22144069268159 | -2.75685967515926 | -1 | FALSE
+
+From the input file, retrieve the number from the numbered_list_genes.txt
+
+```
+awk '{print $1}' result_meta_analysis.txt > to_retrive_numbers.txt
+grep -f to_retrieve_numbers.txt numbered_list_genes.txt > genes_from_meta.txt
+awk -f merge_files.awk genes_from_meta.txt result_meta_analysis.txt > final_result_with_gene_models.txt
+```
 
