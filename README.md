@@ -28,4 +28,30 @@ The R package MetaRNASeq was used to performe the meta-analysis and whole script
 
 The resulting table from the abiotic and the biotic analysis was used as input for the further analysis of the paper.
 
+Create two directories for each analysis
+
+```
+mkdir abiotic
+mkdir biotic
+```
+From the results of Differential expression analysis, print only the columns of Gene name, Log2FoldChange, p-value and FDR, for each treatment
+
+```
+awk -F"\t" '{print $1 "\t" $2 "\t" $4 "\t" $5}' result_edgeR.txt > resEdgeR_treatment.txt
+```
+Count the total of unique genes present in all libraries 
+```
+cat *result_edgeR.txt|awk '{print $1}'|sort -u|wc
+```
+This is the number of lines that the final file should have. 
+
+Run the script CreateCommonGenesTables.java to complete each table with all the genes found in the all the analysis
+
+```
+javac CreateCommomGenesTables.java
+java CreateCommomGenesTables
+```
+
+
+
 
