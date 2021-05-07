@@ -31,26 +31,26 @@ The resulting tables from the abiotic and the biotic analysis were used as input
 Create two directories for each analysis
 
 ```
-mkdir abiotic
-mkdir biotic
+$ mkdir abiotic
+$ mkdir biotic
 ```
 From the results of the Differential expression analysis, print only the columns of Gene name, Log2FoldChange, p-value and FDR, for each treatment
 
 ```
-awk -F"\t" '{print $1 "\t" $2 "\t" $4 "\t" $5}' result_edgeR.txt > resEdgeR_treatment.txt
+$ awk -F"\t" '{print $1 "\t" $2 "\t" $4 "\t" $5}' result_edgeR.txt > resEdgeR_treatment.txt
 ```
 Count the total of unique genes present in all libraries 
 ```
-cat *result_edgeR.txt|awk '{print $1}'|sort -u > list_genes.txt
-awk '{print NR "\t" $0}' list_genes.txt > numbered_list_genes.txt
+$ cat *result_edgeR.txt|awk '{print $1}'|sort -u > list_genes.txt
+$ awk '{print NR "\t" $0}' list_genes.txt > numbered_list_genes.txt
 ```
 The result is the number of unique genes present in all the treatments. 
 
 Run the script CreateCommonGenesTables.java to complete each table with all the genes found in all analysis
 
 ```
-javac CreateCommomGenesTables.java
-java CreateCommomGenesTables
+$ javac CreateCommomGenesTables.java
+$ java CreateCommomGenesTables
 ```
 
 Using R execute the script metaAnalysis.R
@@ -65,8 +65,8 @@ Gene_model | "DE.DDHI" | "DE.DDD" | "DE.SDHI" | "DE.SDD" | "DE.fishercomb" | "X1
 Retrieve gene identity from the numbered_list_genes.txt from the input file:
 
 ```
-awk '{print $1}' result_meta_analysis.txt > to_retrive_numbers.txt
-grep -f to_retrieve_numbers.txt numbered_list_genes.txt > genes_from_meta.txt
-awk -f merge_files.awk genes_from_meta.txt result_meta_analysis.txt > final_result_with_gene_models.txt
+$ awk '{print $1}' result_meta_analysis.txt > to_retrive_numbers.txt
+$ grep -f to_retrieve_numbers.txt numbered_list_genes.txt > genes_from_meta.txt
+$ awk -f merge_files.awk genes_from_meta.txt result_meta_analysis.txt > final_result_with_gene_models.txt
 ```
 
